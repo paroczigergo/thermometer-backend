@@ -6,17 +6,29 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "compose:up": "docker-compose up -d",
+    "compose:down": "docker-compose down"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/node": "18.11.13",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.9",
+    "axios": "^1.2.1",
+    "chart.js": "^4.0.1",
     "eslint": "8.29.0",
     "eslint-config-next": "13.0.6",
+    "mongoose": "^6.8.0",
     "next": "13.0.6",
     "react": "18.2.0",
+    "react-chartjs-2": "^5.0.1",
     "react-dom": "18.2.0",
     "typescript": "4.9.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.20",
+    "tailwindcss": "^3.2.4"
   }
 }
