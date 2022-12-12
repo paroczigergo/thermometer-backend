@@ -6,17 +6,28 @@ import { Sensor, ISensor } from '../../lib/models/Sensor';
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ISensor | null>
+  res: NextApiResponse
 ) {
 
-  // todo add auth
-  // todo only allow get
+  const clientKey = req.query?.key;
+
+  if (!clientKey || clientKey !== process.env.THERMOMETER_CLIENT_KEY) {
+    res.status(401).send({ message: 'Client key is not provided or not valid' })
+    return;
+  }
+
+
+  if (req.method !== 'POST') {
+    res.status(405).send({ message: 'Only POST requests allowed' })
+    return;
+  }
+
 
   const result = await axios({
     url: process.env.WEATHER_URL,
     params: {
       key: process.env.WEATHER_API_KEY,
-      q:  process.env.WEATHER_LOCATION,
+      q: process.env.WEATHER_LOCATION,
     },
 
     method: 'post',
@@ -55,6 +66,6 @@ export default async function handler(
 
 
 
-  res.status(200).json(result)
+  res.status(200).json({ message: 'Sensor data has been saved' })
 }
 

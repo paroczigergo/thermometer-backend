@@ -53,7 +53,7 @@ export default function Home({
 
     setInterval(async () => {
 
-      await axios.get('/api/current-weather');
+      await axios.get('/api/save-sensor-data');
       const newItems = (await axios.get('/api/list-history')).data
       updateChart(newItems)
 
