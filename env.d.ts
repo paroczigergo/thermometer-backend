@@ -9,6 +9,8 @@ declare global {
       WEATHER_LOCATION: string,
       WEATHER_URL: string,
       THERMOMETER_CLIENT_KEY: string,
+      GOOGLE_ID: string,
+      GOOGLE_SECRET: string,
     }
   }
 }

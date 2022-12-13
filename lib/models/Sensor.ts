@@ -3,14 +3,18 @@ import { Schema, model,models, Model } from 'mongoose';
 
 export interface ISensor {
     timestamp: number,
-    temperature: number,
-    humidity: number,
+    outDoorTemperature: number,
+    outDoorHumidity: number,
+    inDoorTemperature: number,
+    inDoorHumidity: number,
 }
 
 const sensorSchema =  new Schema<ISensor>({
     timestamp: Number,
-    temperature: Number,
-    humidity: Number,
+    outDoorTemperature: Number,
+    outDoorHumidity: Number,
+    inDoorTemperature: Number,
+    inDoorHumidity: Number,
   });
 
 export const Sensor: Model<ISensor> = models.Sensor || model<ISensor>('Sensor', sensorSchema)

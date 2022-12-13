@@ -2,6 +2,7 @@ import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createDbConnection } from '../../lib/mongodb';
 import { Sensor, ISensor } from '../../lib/models/Sensor';
+import { L } from 'chart.js/dist/chunks/helpers.core';
 
 
 export default async function handler(
@@ -12,18 +13,26 @@ export default async function handler(
   const clientKey = req.query?.key;
 
   if (!clientKey || clientKey !== process.env.THERMOMETER_CLIENT_KEY) {
-    res.status(401).send({ message: 'Client key is not provided or not valid' })
+    res.status(401).send({ error: 'Client key is not provided or not valid' })
     return;
+  }
+
+
+  const inDoorResult: { humidity: number, temperature: number, timestamp: number } = req.body;
+
+  if (req.headers['content-type']!== 'application/json' || !inDoorResult || !inDoorResult.humidity || !inDoorResult.temperature || !inDoorResult.timestamp) {
+    res.status(400).send({ error: 'Required elements:  humidity, temperature, timestamp in application/json body' })
+    return
   }
 
 
   if (req.method !== 'POST') {
-    res.status(405).send({ message: 'Only POST requests allowed' })
+    res.status(405).send({ error: 'Only POST requests allowed' })
     return;
   }
 
 
-  const result = await axios({
+  const outDoorResult = await axios({
     url: process.env.WEATHER_URL,
     params: {
       key: process.env.WEATHER_API_KEY,
@@ -39,26 +48,26 @@ export default async function handler(
   })
     .then((response) => response.data)
     .then((response) => {
-      const timestamp = response?.current?.last_updated_epoch
       return {
-        temperature: response?.current?.temp_c,
-        humidity: response?.current?.humidity,
-        timestamp: timestamp,
+        outDoorTemperature: response?.current?.temp_c,
+        outDoorHumidity: response?.current?.humidity,
       }
     })
     .catch((error) => {
       return null
     })
 
-  if (!!result) {
+  if (!!outDoorResult) {
 
     await createDbConnection()
 
 
     const newItem = new Sensor({
-      temperature: result.temperature,
-      humidity: result.humidity,
-      timestamp: result.timestamp,
+      timestamp: inDoorResult.timestamp,
+      outDoorTemperature: outDoorResult.outDoorTemperature,
+      outDoorHumidity: outDoorResult.outDoorHumidity,
+      inDoorTemperature: inDoorResult.temperature,
+      inDoorHumidity: inDoorResult.humidity,
     });
     await newItem.save()
 
