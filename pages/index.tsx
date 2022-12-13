@@ -18,6 +18,7 @@ import axios from 'axios';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { table } from 'console';
 import { faker } from '@faker-js/faker';
+import { useRouter } from 'next/router';
 
 ChartJS.register(
   CategoryScale,
@@ -31,6 +32,14 @@ ChartJS.register(
 
 export const options = {
   responsive: true,
+  scales: {
+    x: {
+      ticks: {
+          autoSkip: true,
+          maxTicksLimit: 10
+      }
+  }
+  },
   plugins: {
     legend: {
       position: 'top' as const,
@@ -51,29 +60,33 @@ export default function Home({
 
   const { data: session, status } = useSession();
   const [data, setData] = useState<ChartData<'line'>>()
+  const { query } = useRouter();
 
   useEffect(() => {
     let interval: any;
     if (status !== 'loading' && session) {
       updateChart(items)
 
-      interval = setInterval(async () => {
+      if (query?.mock === 'true') {
+        interval = setInterval(async () => {
 
-        await axios.post(`/api/save-sensor-data?key=${process.env.NEXT_PUBLIC_CLIENT_ID}`, {
-          humidity: faker.datatype.float({
-            min: 20,
-            max: 40
-          }),
-          temperature: faker.datatype.float({
-            min: -5,
-            max: 5
-          }),
-          timestamp: Date.now() / 1000
-        });
-        const newItems = (await axios.get('/api/list-history')).data
-        updateChart(newItems)
+          await axios.post(`/api/save-sensor-data?key=${process.env.NEXT_PUBLIC_CLIENT_ID}`, {
+            humidity: faker.datatype.float({
+              min: 20,
+              max: 40
+            }),
+            temperature: faker.datatype.float({
+              min: -5,
+              max: 5
+            }),
+            timestamp: Date.now() / 1000
+          });
+          const newItems = (await axios.get('/api/list-history')).data
+          updateChart(newItems)
 
-      }, 5000)
+        }, 5000)
+      }
+
     }
 
     return () => clearInterval(interval);
@@ -114,7 +127,7 @@ export default function Home({
     setData(lineData)
   }
 
-  if(status === 'loading'){
+  if (status === 'loading') {
     return <div>Loading...</div>
   }
 
