@@ -13,6 +13,6 @@ resource "vercel_project" "thermometer" {
   git_repository = {
     type = "github"
     repo = "paroczigergo/thermometer-backend"
-    production_branch = "deployment-wiring"
+    production_branch = "develop"
   }
 }
