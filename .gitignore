@@ -43,4 +43,6 @@ data
 terraform.tfstate
 
 *.sh
+.terraform.tfstate.*
 terraform.tfstate.*
+*.tfvars
