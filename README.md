@@ -1,4 +1,7 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a thermometer API and dashboard component to interact with a [Thermometer Client](https://github.com/paroczigergo/thermometer).
+It also contains different deployment options and configurations: Docker, Docker Compose, Terraform, Vercel, Mongodb Atlas, Github Actions
+
+My main goal was to try out deployment options and also create a [Next.js](https://nextjs.org/) baseds cloud component for the existing [Thermometer Client](https://github.com/paroczigergo/thermometer which can be installed and run on Raspberry Pi with an Arduino board and a temperature/humidity sensor.
 
 ## Getting Started
 
@@ -12,23 +15,36 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Configuration
+There is no environmental separation in this project, just an `.env` file which can be created from `.env.example`
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Deployment
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Terraform
+This option is using Vercel to deploy the web and API components and using Mongodb Atlas for database. For the sake of simplicity I use the same repository to store the terraform config file, but normally it should be in a separated one.
 
-## Learn More
+#### Requirements
+- Terraform CLI
+- Vercel account
+#### Steps
+- create Vercel access token with `Full Access`
+- run `terraform init`
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Github actions
+This is not a standalone deployment. It uses the terraform deployment with the Github CI/CD pipeline.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### Requirements
+- Github account
+- code should be in Github
+- Terraform Cloud user
 
-## Deploy on Vercel
+#### Steps
+- create Terraform Cloud user API token
+- save it to `TF_API_TOKEN` under github repository's secrets
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Local Docker Compose
+This option is only for testing the components locally with Docker and Docker compose.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+#### Requirements
+- installed Docker Hub

@@ -41,3 +41,5 @@ data
 .terraform
 .terraform.lock.hcl
 terraform.tfstate
+
+*.sh
