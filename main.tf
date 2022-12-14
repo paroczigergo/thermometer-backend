@@ -74,6 +74,12 @@ resource "vercel_project" "thermometer" {
       value  = var.NEXT_PUBLIC_CLIENT_ID
       target = ["production"]
 
+    },
+    {
+      key    = "NEXTAUTH_SECRET"
+      value  = var.NEXTAUTH_SECRET
+      target = ["production"]
+
     }
   ]
 }

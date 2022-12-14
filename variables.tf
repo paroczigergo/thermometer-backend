@@ -42,3 +42,7 @@ variable "GOOGLE_SECRET" {
 variable "NEXT_PUBLIC_CLIENT_ID" {
   type = string
 }
+
+variable "NEXTAUTH_SECRET" {
+  type = string
+}
