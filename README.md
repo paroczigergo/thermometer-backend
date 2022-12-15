@@ -12,6 +12,7 @@ My main goal was to try out deployment options and also create a [Next.js](https
     - it merges the incoming indoor data with an external outdoor data and save it to a mongodb database
 - Listing saved items API
 - Show saved items on a line chart
+- Mock sendor data saving with the `mock=true` query param
 
 ## Local Configuration
 Locally there is no environmental separation in this project, just an `.env` file which can be created from `.env.example`
