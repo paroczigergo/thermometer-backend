@@ -1,13 +1,22 @@
-This is a thermometer API and dashboard component to interact with a [Thermometer Client](https://github.com/paroczigergo/thermometer).
+# Termometer dashboard
+
+This is a thermometer API and dashboard component to show indoor and outdoot temperature and humidity values.
 It also contains different deployment options and configurations: Docker, Docker Compose, Terraform, Vercel, Mongodb Atlas, Github Actions
 
-My main goal was to try out deployment options and also create a [Next.js](https://nextjs.org/) based cloud component for the existing [Thermometer Client](https://github.com/paroczigergo/thermometer which can be installed and run on a Raspberry Pi with an Arduino board and a temperature/humidity sensor.
+My main goal was to try out deployment options and also create a [Next.js](https://nextjs.org/) based cloud component for storing and providing weater data from an external API and from a internal client which can be installed and run on a Raspberry Pi ([Thermometer Client](https://github.com/paroczigergo/thermometer))
 
+## Functions
+
+- Google authentication 
+- Sensor data saving API
+    - it merges the incoming indoor data with an external outdoor data and save it to a mongodb database
+- Listing saved items API
+- Show saved items on a line chart
 
 ## Local Configuration
-There is no environmental separation in this project locally, just an `.env` file which can be created from `.env.example`
+Locally there is no environmental separation in this project, just an `.env` file which can be created from `.env.example`
 
-## Getting Started local development
+## Local development
 
 Run the development server:
 
@@ -59,9 +68,9 @@ This option is only for testing the components locally with Docker and Docker co
 This is not a standalone deployment option. It uses the terraform deployment with the Github CI/CD pipeline.
 
 #### Considerations
-It is all about where to manage the terraform states and variables.
-Terraform Cloud offers an easy and straight forward way to do it, but it can be pricy and the variables has to be typed manually which is not ideal.
-On the other hand we can also store states and variables in a private S3 bucket, which keeps the state file synced and also give us the flexibility to use variable files. It maybe requires more configuration in the begining but it will provide more scaleability 
+- It is all about where to manage the terraform states and variables.
+- Terraform Cloud offers an easy and straight forward way to do it, but it can be pricy and the variables has to be typed manually which is not ideal.
+- On the other hand we can also store states and variables in a private S3 bucket, which keeps the state file synced and also give us the flexibility to use variable files. It maybe requires more configuration in the begining but it will provide more scaleability 
 
 #### Requirements
 - Github account
