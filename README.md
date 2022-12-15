@@ -8,9 +8,9 @@ My main goal was to try out deployment options and also create a [Next.js](https
 ## Functions
 
 - Google authentication 
-- Sensor data saving API
+- Save sensor data
     - it merges the incoming indoor data with an external outdoor data and save it to a mongodb database
-- Listing saved items API
+- Listing the last 50 temperature data
 - Show saved items on a line chart
 - Mock sendor data saving with the `mock=true` query param
 

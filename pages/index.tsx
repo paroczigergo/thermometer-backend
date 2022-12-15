@@ -1,34 +1,19 @@
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  ChartData,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
 import { InferGetServerSidePropsType } from 'next';
-import { getSensorHistoryList } from './api/list-history';
 import { useEffect, useState } from 'react';
 import { ISensor } from '../lib/models/Sensor';
 import axios from 'axios';
-import { table } from 'console';
 import { faker } from '@faker-js/faker';
 import { useRouter } from 'next/router';
 import { ChartComponent } from '../components/chart-component';
 import { trpc } from '../utils/trpc';
-
+import { fetchTemperatureData } from '../lib/routers/temperature-data';
 
 
 export default function Home({ items, }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   const { query } = useRouter();
   const [loadedItems, setLoadedItems] = useState<Array<ISensor>>(items);
-  const { isFetched, data } = trpc.hello.useQuery({ text: 'client' });
-
+  const { data, refetch } = trpc.temperatureData.list.useQuery();
 
 
   useEffect(() => {
@@ -37,12 +22,18 @@ export default function Home({ items, }: InferGetServerSidePropsType<typeof getS
     if (query?.mock === 'true') {
       interval = setInterval(async () => {
         await postMockSensorData();
-        await fecthNewData();
-      }, 4000)
+        await refetch()
+      }, 5000)
     }
 
     return () => clearInterval(interval);
   }, [query?.mock])
+
+  useEffect(() => {
+    if (data) {
+      setLoadedItems(data)
+    }
+  }, [data])
 
 
   const postMockSensorData = async () => {
@@ -59,10 +50,6 @@ export default function Home({ items, }: InferGetServerSidePropsType<typeof getS
     });
   }
 
-  const fecthNewData = async () => {
-    const newItems = (await axios.get('/api/list-history')).data
-    setLoadedItems(newItems)
-  }
 
   return <ChartComponent items={loadedItems} />
 
@@ -71,10 +58,11 @@ export default function Home({ items, }: InferGetServerSidePropsType<typeof getS
 
 
 export async function getServerSideProps() {
+
   try {
 
     return {
-      props: { items: await getSensorHistoryList() },
+      props: { items: await fetchTemperatureData() },
     }
   } catch (e) {
     console.error(e)
