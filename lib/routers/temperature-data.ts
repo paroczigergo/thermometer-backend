@@ -9,8 +9,10 @@ import axios from 'axios';
 
 export const fetchTemperatureData = async () => {
     await createDbConnection()
+
+    const itemCount = await Sensor.count();
     const items = await Sensor.find({}, 'outDoorTemperature outDoorHumidity inDoorTemperature inDoorHumidity timestamp')
-        .skip(await Sensor.count() - 50)
+        .skip(itemCount < 50 ? 0 : 50)
         .lean();
     return deepCopy<Array<ISensor>>(items);
 }
