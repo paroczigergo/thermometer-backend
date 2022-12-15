@@ -11,9 +11,12 @@ export const fetchTemperatureData = async () => {
     await createDbConnection()
 
     const itemCount = await Sensor.count();
+    const limit = 50
+
     const items = await Sensor.find({}, 'outDoorTemperature outDoorHumidity inDoorTemperature inDoorHumidity timestamp')
-        .skip(itemCount < 50 ? 0 : 50)
+        .skip(itemCount < limit ? 0 : itemCount - limit)
         .lean();
+
     return deepCopy<Array<ISensor>>(items);
 }
 
