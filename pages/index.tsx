@@ -1,7 +1,6 @@
 import { InferGetServerSidePropsType } from 'next';
 import { useEffect, useState } from 'react';
 import { ISensor } from '../lib/models/Sensor';
-import axios from 'axios';
 import { faker } from '@faker-js/faker';
 import { useRouter } from 'next/router';
 import { ChartComponent } from '../components/chart-component';
@@ -14,6 +13,7 @@ export default function Home({ items, }: InferGetServerSidePropsType<typeof getS
   const { query } = useRouter();
   const [loadedItems, setLoadedItems] = useState<Array<ISensor>>(items);
   const { data, refetch } = trpc.temperatureData.list.useQuery();
+  const mutation = trpc.temperatureData.save.useMutation();
 
 
   useEffect(() => {
@@ -37,7 +37,8 @@ export default function Home({ items, }: InferGetServerSidePropsType<typeof getS
 
 
   const postMockSensorData = async () => {
-    await axios.post(`/api/save-sensor-data?key=${process.env.NEXT_PUBLIC_CLIENT_ID}`, {
+    mutation.mutateAsync({
+      clientKey: process.env.NEXT_PUBLIC_CLIENT_ID as string,
       humidity: faker.datatype.float({
         min: 20,
         max: 40
@@ -47,7 +48,8 @@ export default function Home({ items, }: InferGetServerSidePropsType<typeof getS
         max: 5
       }),
       timestamp: Date.now() / 1000
-    });
+    })
+
   }
 
 
