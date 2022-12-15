@@ -5,7 +5,7 @@ My main goal was to try out deployment options and also create a [Next.js](https
 
 
 ## Local Configuration
-There is no environmental separation in this project, just an `.env` file which can be created from `.env.example`
+There is no environmental separation in this project locally, just an `.env` file which can be created from `.env.example`
 
 ## Getting Started local development
 
@@ -41,19 +41,7 @@ This option is using Vercel to deploy the web and API components and using Mongo
 #### Destroy
 - run `yarn run terraform:destroy:production`
 
-### Github actions
-This is not a standalone deployment. It uses the terraform deployment with the Github CI/CD pipeline.
-
-#### Requirements
-- Github account
-- code should be in Github
-- Terraform Cloud user
-
-#### Steps
-- create Terraform Cloud user API token
-- save it to `TF_API_TOKEN` under github repository's secrets
-
-### Local Docker Compose
+### With Docker Compose
 This option is only for testing the components locally with Docker and Docker compose.
 
 #### Requirements
@@ -65,3 +53,25 @@ This option is only for testing the components locally with Docker and Docker co
 
 #### Destroy
 - run `yarn run compose:down`
+
+
+### With Github actions (not implemented)
+This is not a standalone deployment option. It uses the terraform deployment with the Github CI/CD pipeline.
+
+#### Considerations
+It is all about where to manage the terraform states and variables.
+Terraform Cloud offers an easy and straight forward way to do it, but it can be pricy and the variables has to be typed manually which is not ideal.
+On the other hand we can also store states and variables in a private S3 bucket, which keeps the state file synced and also give us the flexibility to use variable files. It maybe requires more configuration in the begining but it will provide more scaleability 
+
+#### Requirements
+- Github account
+- code should be in Github
+- Terraform Cloud user or an AWS user with an S3 bucket
+
+#### Terraform Cloud Steps
+- create Terraform Cloud user API token
+- save it to `TF_API_TOKEN` under github repository's secrets
+- todo
+
+#### AWS S3 Steps
+- todo
