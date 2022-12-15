@@ -11,7 +11,8 @@
     "compose:down": "docker-compose down",
     "terraform:init": "terraform init",
     "terraform:plan:production": "terraform plan -var-file production.tfvars",
-    "terraform:apply:production": "terraform apply -var-file production.tfvars"
+    "terraform:apply:production": "terraform apply -var-file production.tfvars",
+    "terraform:destroy:production": "terraform destroy -var-file production.tfvars"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
