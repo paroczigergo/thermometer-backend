@@ -19,6 +19,7 @@ import { table } from 'console';
 import { faker } from '@faker-js/faker';
 import { useRouter } from 'next/router';
 import { ChartComponent } from '../components/chart-component';
+import { trpc } from '../utils/trpc';
 
 
 
@@ -26,6 +27,9 @@ export default function Home({ items, }: InferGetServerSidePropsType<typeof getS
 
   const { query } = useRouter();
   const [loadedItems, setLoadedItems] = useState<Array<ISensor>>(items);
+  const { isFetched, data } = trpc.hello.useQuery({ text: 'client' });
+
+
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
