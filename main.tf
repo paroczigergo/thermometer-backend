@@ -5,7 +5,7 @@ terraform {
       version = "0.11.2"
     }
 
-     mongodbatlas = {
+    mongodbatlas = {
       source = "mongodb/mongodbatlas"
     }
   }
@@ -22,68 +22,68 @@ resource "vercel_project" "thermometer" {
   name      = "terraform-thermometer-backend"
   framework = "nextjs"
   git_repository = {
-    type = "github"
-    repo = var.repo
+    type              = "github"
+    repo              = var.repo
     production_branch = "develop"
   }
   environment = [
     {
       key    = "MONGODB_URI"
-      value  = "mongodb+srv://${var.ATLAS_DB_USER_NAME}:${var.ATLAS_DB_USER_PASSWORD}@${split("mongodb+srv://",mongodbatlas_cluster.my_cluster.connection_strings.0.standard_srv)[1]}/?retryWrites=true&w=majority"
-      target = ["production"]
+      value  = "mongodb+srv://${var.ATLAS_DB_USER_NAME}:${var.ATLAS_DB_USER_PASSWORD}@${split("mongodb+srv://", mongodbatlas_cluster.my_cluster.connection_strings.0.standard_srv)[1]}/?retryWrites=true&w=majority"
+      target = ["production", "development", "preview"]
     },
     {
       key    = "DB_NAME"
       value  = var.DB_NAME
-      target = ["production"]
+      target = ["production", "development", "preview"]
 
     },
     {
       key    = "WEATHER_API_KEY"
       value  = var.WEATHER_API_KEY
-      target = ["production"]
+      target = ["production", "development", "preview"]
 
     },
     {
       key    = "WEATHER_LOCATION"
       value  = var.WEATHER_LOCATION
-      target = ["production"]
+      target = ["production", "development", "preview"]
 
     },
     {
       key    = "WEATHER_URL"
       value  = var.WEATHER_URL
-      target = ["production"]
+      target = ["production", "development", "preview"]
 
     },
     {
       key    = "THERMOMETER_CLIENT_KEY"
       value  = var.THERMOMETER_CLIENT_KEY
-      target = ["production"]
+      target = ["production", "development", "preview"]
 
     },
     {
       key    = "GOOGLE_ID"
       value  = var.GOOGLE_ID
-      target = ["production"]
+      target = ["production", "development", "preview"]
 
     },
     {
       key    = "GOOGLE_SECRET"
       value  = var.GOOGLE_SECRET
-      target = ["production"]
+      target = ["production", "development", "preview"]
 
     },
     {
       key    = "NEXT_PUBLIC_CLIENT_ID"
       value  = var.NEXT_PUBLIC_CLIENT_ID
-      target = ["production"]
+      target = ["production", "development", "preview"]
 
     },
     {
       key    = "NEXTAUTH_SECRET"
       value  = var.NEXTAUTH_SECRET
-      target = ["production"]
+      target = ["production", "development", "preview"]
 
     }
   ]
@@ -123,8 +123,8 @@ resource "mongodbatlas_cluster" "my_cluster" {
   name       = var.ATLAS_CLUSTER_NAME
 
   # Provider Settings "block"
-  provider_name = "TENANT"
-  backing_provider_name       = var.ATLAS_PROVIDER_NAME
+  provider_name         = "TENANT"
+  backing_provider_name = var.ATLAS_PROVIDER_NAME
   # topic: https://github.com/mongodb/terraform-provider-mongodbatlas/issues/160#issuecomment-594006265
 
   provider_region_name = var.ATLAS_PROVIDER_REGION_NAME
