@@ -1,34 +1,87 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Termometer dashboard
 
-## Getting Started
+This is a thermometer API and dashboard component to show indoor and outdoot temperature and humidity values.
+It also contains different deployment options and configurations: Docker, Docker Compose, Terraform, Vercel, Mongodb Atlas, Github Actions
 
-First, run the development server:
+My main goal was to try out deployment options and also create a [Next.js](https://nextjs.org/) based cloud component for storing and providing weater data from an external API and from a internal client which can be installed and run on a Raspberry Pi ([Thermometer Client](https://github.com/paroczigergo/thermometer))
+
+## Functions
+
+- Google authentication 
+- Sensor data saving API
+    - it merges the incoming indoor data with an external outdoor data and save it to a mongodb database
+- Listing saved items API
+- Show saved items on a line chart
+- Mock sendor data saving with the `mock=true` query param
+
+## Local Configuration
+Locally there is no environmental separation in this project, just an `.env` file which can be created from `.env.example`
+
+## Local development
+
+Run the development server:
 
 ```bash
-npm run dev
-# or
 yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### With Terraform
+This option is using Vercel to deploy the web and API components and using Mongodb Atlas for database. For the sake of simplicity I use the same repository to store the terraform config file, but normally it should be in a separated project.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+#### Requirements
+- Terraform CLI
+- Vercel account
+- Mongodb Atlas account
+#### Steps
+- create Vercel access token with `Full Access`
+- create an organization and programmatic API key for mongodb Atlas
+- create a `production.tfvars` file from `production.tfvars.example`
+    - fill all variables based on the `.env` file
+    - `MONGODB_URI` will be created during the deploy, later you can copy it from the terminal or from the tfstate file
+- run `yarn run terraform:init`
+- run `yarn run terraform:plan:production`
+- run `yarn run terraform:apply:production`
+- commit a change to trigger the deploy
+- check out the deployment on https://vercel.com/dashboard
 
-## Learn More
+#### Destroy
+- run `yarn run terraform:destroy:production`
 
-To learn more about Next.js, take a look at the following resources:
+### With Docker Compose
+This option is only for testing the components locally with Docker and Docker compose.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Requirements
+- installed Docker Hub
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### Steps
+- run Docker Hub
+- run `yarn run compose:up`
 
-## Deploy on Vercel
+#### Destroy
+- run `yarn run compose:down`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### With Github actions (not implemented)
+This is not a standalone deployment option. It uses the terraform deployment with the Github CI/CD pipeline.
+
+#### Considerations
+- It is all about where to manage the terraform states and variables.
+- Terraform Cloud offers an easy and straight forward way to do it, but it can be pricy and the variables has to be typed manually which is not ideal.
+- On the other hand we can also store states and variables in a private S3 bucket, which keeps the state file synced and also give us the flexibility to use variable files. It maybe requires more configuration in the begining but it will provide more scaleability 
+
+#### Requirements
+- Github account
+- code should be in Github
+- Terraform Cloud user or an AWS user with an S3 bucket
+
+#### Terraform Cloud Steps
+- create Terraform Cloud user API token
+- save it to `TF_API_TOKEN` under github repository's secrets
+- todo
+
+#### AWS S3 Steps
+- todo

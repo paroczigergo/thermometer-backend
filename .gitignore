@@ -37,3 +37,12 @@ next-env.d.ts
 
 .env
 data
+
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+
+*.sh
+.terraform.tfstate.*
+terraform.tfstate.*
+*.tfvars
