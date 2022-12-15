@@ -8,21 +8,30 @@ My main goal was to try out deployment options and also create a [Next.js](https
 ## Functions
 
 - Google authentication 
-- Sensor data saving API
+- Save sensor data
     - it merges the incoming indoor data with an external outdoor data and save it to a mongodb database
-- Listing saved items API
+- Listing the last 50 temperature data
 - Show saved items on a line chart
 - Mock sendor data saving with the `mock=true` query param
 
-## Local Configuration
+## Configuration
 Locally there is no environmental separation in this project, just an `.env` file which can be created from `.env.example`
 
-## Local development
+### Requirements
+- weatherapi.com account
+    - generate an api key
+- google cloud account
+    - generated OAuth 2.0 Client id and secret
+- existed mongodb connection uri
+    - this can be generated through deployments as well
+- a generated secret token for `NEXTAUTH_SECRET` from `openssl rand -base64 32` or using https://generate-secret.vercel.app/32
+
+## Development
 
 Run the development server:
 
 ```bash
-yarn dev
+$ yarn run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
