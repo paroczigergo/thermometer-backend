@@ -94,3 +94,17 @@ This is not a standalone deployment option. It uses the terraform deployment wit
 
 #### AWS S3 Steps
 - todo
+
+
+## Testing
+Some example test cases were created just to demonstate the working of a TDD environment.
+
+### Used libraries
+- [Jest](https://jestjs.io/) for testing framework
+- [Testing react library](https://testing-library.com/) for UI component testing
+- [Cypress](https://www.cypress.io/) for e2e testing
+
+### Usage
+- run `yarn jest` for unit testing
+- run `yarn dev` and  `yarn cypress` for e2e testing
+    - select the `create-a-message` test case

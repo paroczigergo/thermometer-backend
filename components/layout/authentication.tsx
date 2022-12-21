@@ -1,5 +1,6 @@
 import { L } from "chart.js/dist/chunks/helpers.core";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { ReactNode } from "react"
 import { Loading } from "../icons/loading";
 
@@ -7,7 +8,12 @@ import { Loading } from "../icons/loading";
 
 
 export const AuthenticationLayout = ({ children }: { children: ReactNode }) => {
+    const router = useRouter()
     const { status } = useSession();
+
+    if (checkIfPublic(router.pathname)) {
+        return <>{children}</>
+    }
 
     switch (status) {
         case 'authenticated':
@@ -20,4 +26,13 @@ export const AuthenticationLayout = ({ children }: { children: ReactNode }) => {
 
 
 
+}
+
+
+const publicPages = [
+    '/testing'
+]
+
+const checkIfPublic = (path: string) => {
+    return publicPages.includes(path)
 }

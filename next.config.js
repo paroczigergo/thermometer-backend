@@ -11,7 +11,7 @@ const nextConfig = {
   redirects: async () => {
     return [
       {
-        source: '/([^api/]+)',
+        source: '/((?!api|testing).+)',
         destination: '/',
         permanent: true,
       },
