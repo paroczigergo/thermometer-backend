@@ -3,14 +3,14 @@
 This is a thermometer API and dashboard component to show indoor and outdoot temperature and humidity values.
 It also contains different deployment options and configurations: Docker, Docker Compose, Terraform, Vercel, Mongodb Atlas, Github Actions
 
-My main goal was to try out deployment options and also create a [Next.js](https://nextjs.org/) based cloud component for storing and providing weater data from an external API and from a internal client which can be installed and run on a Raspberry Pi ([Thermometer Client](https://github.com/paroczigergo/thermometer))
+My main goal was to try out deployment options and also create a [Next.js](https://nextjs.org/) based cloud component for storing and providing weather data from an external API and from a internal client which can be installed and run on a Raspberry Pi ([Thermometer Client](https://github.com/paroczigergo/thermometer))
 
 ## Functions
 
 - Google authentication 
 - Save sensor data
     - it merges the incoming indoor data with an external outdoor data and save it to a mongodb database
-- Listing the last 50 temperature data
+- Listing the last 50 sensor data
 - Show saved items on a line chart
 - Mock sendor data saving with the `mock=true` query param
 
@@ -24,7 +24,7 @@ Locally there is no environmental separation in this project, just an `.env` fil
     - generated OAuth 2.0 Client id and secret
 - existed mongodb connection uri
     - this can be generated through deployments as well
-- a generated secret token for `NEXTAUTH_SECRET` from `openssl rand -base64 32` or using https://generate-secret.vercel.app/32
+- generated secret token for `NEXTAUTH_SECRET` from `openssl rand -base64 32` or using https://generate-secret.vercel.app/32
 
 ## Development
 
@@ -50,7 +50,7 @@ This option is using Vercel to deploy the web and API components and using Mongo
 - create an organization and programmatic API key for mongodb Atlas
 - create a `production.tfvars` file from `production.tfvars.example`
     - fill all variables based on the `.env` file
-    - `MONGODB_URI` will be created during the deploy, later you can copy it from the terminal or from the tfstate file
+    - `MONGODB_URI` will be created during the deploy
 - run `yarn run terraform:init`
 - run `yarn run terraform:plan:production`
 - run `yarn run terraform:apply:production`
