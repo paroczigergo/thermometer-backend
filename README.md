@@ -28,7 +28,7 @@ Locally there is no environmental separation in this project, just an `.env` fil
 
 ## Development
 
-Run the development server:
+### Run the development server
 
 ```bash
 $ yarn run dev
